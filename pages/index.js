@@ -57,6 +57,7 @@ const Home = ({ videos }) => {
           />
         </div>
       </div>
+      <div className="video-fit">feed</div>
     </>
   );
 };
