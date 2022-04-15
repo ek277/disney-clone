@@ -1,8 +1,10 @@
 import { gql, GraphQLClient } from "graphql-request";
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async (pageContext) => {
   const url = process.env.ENDPOINT;
   const token = process.env.GRAPH_CMS_TOKEN;
+
+  const pageSlug = pageContext.query.slug;
 
   const graphQLClient = new GraphQLClient(url, {
     headers: {
@@ -11,8 +13,8 @@ export const getStaticProps = async () => {
   });
 
   const query = gql`
-    query {
-      videos {
+    query ($pageSlug: String!) {
+      video(where: { slug: $pageSlug }) {
         createdAt
         id
         title
@@ -30,20 +32,23 @@ export const getStaticProps = async () => {
     }
   `;
 
-  const data = await graphQLClient.request(query);
+  const variables = {
+    pageSlug,
+  };
 
-  const videos = data.videos;
+  const data = await graphQLClient.request(query, variables);
+  const video = data.video;
 
   return {
     props: {
-      videos,
+      video,
     },
   };
 };
 
-const Home = ({ videos }) => {
-  // console.log(videos);
-  return <div>Home</div>;
+const Video = ({ video }) => {
+  console.log(video);
+  return <div></div>;
 };
 
-export default Home;
+export default Video;
