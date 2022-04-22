@@ -1,4 +1,5 @@
 import { gql, GraphQLClient } from "graphql-request";
+import NavBar from "../components/Navbar";
 import Section from "../components/Section";
 
 export const getStaticProps = async () => {
@@ -58,6 +59,7 @@ const Home = ({ videos }) => {
 
   return (
     <>
+      <NavBar />
       <div className="app">
         <div className="main-video">
           <img

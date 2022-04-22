@@ -13,6 +13,12 @@ a {
   text-decoration: none;
 }
 
+.navbar {
+  height: 80px;
+  width: 100%;
+  display: flex;
+}
+
 .app {
   margin: 20px;
 }
