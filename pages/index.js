@@ -52,6 +52,10 @@ const Home = ({ videos }) => {
     return videos.filter((video) => video.tags.includes(genre));
   };
 
+  const unSeenVideos = (videos) => {
+    return videos.filter((video) => video.seen == false || video.seen == null);
+  };
+
   return (
     <>
       <div className="app">
@@ -63,6 +67,8 @@ const Home = ({ videos }) => {
         </div>
 
         <div className="video-feed">
+          <Section genre={"Recomended for you"} videos={unSeenVideos(videos)} />
+
           <Section genre={"Family"} videos={filterVideos(videos, "family")} />
           <Section
             genre={"Thriller"}
