@@ -12,7 +12,7 @@ export const getStaticProps = async () => {
     },
   });
 
-  const query = gql`
+  const videosQuery = gql`
     query {
       videos {
         createdAt
@@ -32,18 +32,32 @@ export const getStaticProps = async () => {
     }
   `;
 
-  const data = await graphQLClient.request(query);
+  const accountQuery = gql`
+    query {
+      account(where: { id: "cl1pxglbecvtg0biof4h95egs" }) {
+        username
+        avatar {
+          url
+        }
+      }
+    }
+  `;
 
+  const data = await graphQLClient.request(videosQuery);
   const videos = data.videos;
+
+  const accountData = await graphQLClient.request(accountQuery);
+  const account = accountData.account;
 
   return {
     props: {
       videos,
+      account,
     },
   };
 };
 
-const Home = ({ videos }) => {
+const Home = ({ videos, account }) => {
   console.log(videos);
   const randomVideo = (videos) => {
     return videos[Math.floor(Math.random() * videos.length)];
@@ -59,7 +73,7 @@ const Home = ({ videos }) => {
 
   return (
     <>
-      <NavBar />
+      <NavBar account={account} />
       <div className="app">
         <div className="main-video">
           <img
