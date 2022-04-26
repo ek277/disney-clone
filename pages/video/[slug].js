@@ -13,7 +13,7 @@ export const getServerSideProps = async (pageContext) => {
     },
   });
 
-  const query = gql`
+  const videosQuery = gql`
     query ($pageSlug: String!) {
       video(where: { slug: $pageSlug }) {
         createdAt
@@ -37,7 +37,7 @@ export const getServerSideProps = async (pageContext) => {
     pageSlug,
   };
 
-  const data = await graphQLClient.request(query, variables);
+  const data = await graphQLClient.request(videosQuery, variables);
   const video = data.video;
 
   return {
@@ -52,31 +52,40 @@ const Video = ({ video }) => {
 
   return (
     <>
-      <img
-        className="video-image"
-        src={video.thumbnail.url}
-        alt={video.title}
-      />
-      <div className="info">
-        <p>{video.tags.join(", ")}</p>
-        <p>{video.description}</p>
-        <a href="/">
-          <p>go back</p>
-        </a>
-        <button
-          className="video-overlay"
-          onClick={() => {
-            watching ? setWatching(false) : setWatching(true);
-          }}
-        >
-          PLAY
-        </button>
-        {watching && (
-          <video width="100%" controls>
-            <source src={video.mp4.url} type="video/mp4" />
-          </video>
-        )}
-      </div>
+      {!watching && (
+        <img
+          className="video-image"
+          src={video.thumbnail.url}
+          alt={video.title}
+        />
+      )}
+      {!watching && (
+        <div className="info">
+          <p>{video.tags.join(", ")}</p>
+          <p>{video.description}</p>
+          <a href="/">
+            <p>go back</p>
+          </a>
+          <button
+            className="video-overlay"
+            onClick={() => {
+              watching ? setWatching(false) : setWatching(true);
+            }}
+          >
+            PLAY
+          </button>
+        </div>
+      )}
+
+      {watching && (
+        <video width="100%" controls>
+          <source src={video.mp4.url} type="video/mp4" />
+        </video>
+      )}
+      <div
+        className="info-footer"
+        onClick={() => (watching ? setWatching(false) : null)}
+      ></div>
     </>
   );
 };
